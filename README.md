@@ -56,7 +56,7 @@ At this point you should be SSH-ed into your AWS Ubuntu virtual machine, enter t
 
 Then install [REX-Ray](http://rexray.readthedocs.io/en/stable/)
 
-``` curl -sSL https://dl.bintray.com/emccode/rexray/install | sh ```
+``` curl -sSL https://dl.bintray.com/emccode/rexray/install | sh -s -- stable ```
 
 Modify the /etc/rexray/config.yml file(requires sudo)
 
