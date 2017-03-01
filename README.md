@@ -2,7 +2,7 @@
  
 **Dockerfile + Instructions for Deploying Stateful Minecraft Server via Container**
 
-  Inspired by [blog article from Julia Ferraioli] http://www.blog.juliaferraioli.com/2015/06/running-minecraft-server-on-google.html
+  Inspired by [blog article from Julia Ferraioli](http://www.blog.juliaferraioli.com/2015/06/running-minecraft-server-on-google.html)
 ***
 
 ### Build and run a Dockerfile to run a stateless Minecraft server on local host
@@ -43,7 +43,8 @@
  - Step 5: give the virtual machine a unique, descriptive name. Under 'Key' enter "Name" and under 'Value' enter your desired name such as "Minecraft_Server"
  - Step 6: configure the security group. Next to 'Security group name:' enter "minecraft_security_group". Below leave the SSH port, but underneath click 'Add Rule' and add a Custom TCP Rule
                 enter "25565" in the Port Range field and set Source to 'Anywhere'
- - Step 7: review and hit the 'Launch' button, configure your [SSH keys](https://www.digitalocean.com/community/tutorials/how-to-set-up-SSH-keys--2) and launch the instance
+ - Step 7: review and hit the 'Launch' button, configure your [SSH keys](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html) and launch the instance.
+ You can [generate your own SSH key pair](https://www.digitalocean.com/community/tutorials/how-to-set-up-ssh-keys--2) to import for use as well.
 - Startup may take several minutes, navigate to the 'Instances' menu and when the 2 status checks complete, SSH into the machine
 
 #### Install REX-Ray and Docker
@@ -53,25 +54,19 @@ At this point you should be SSH-ed into your AWS Ubuntu virtual machine, enter t
 
 ``` sudo apt-get upgrade -y ```
 
-Then install REX-Ray
+Then install [REX-Ray](http://rexray.readthedocs.io/en/stable/)
 
-``` curl -sSL https://dl.bintray.com/emccode/rexray/install | sh -s -- stable 0.3.3 ```
+``` curl -sSL https://dl.bintray.com/emccode/rexray/install | sh ```
 
 Modify the /etc/rexray/config.yml file(requires sudo)
 
 ``` sudo vi /etc/rexray/config.yml ```
 
-Enter the following, replacing the AWS keys appropriately:
+Enter the following, replacing the AWS keys appropriately (from [REX-Ray Configuration Generator](http://rexrayconfig.codedellemc.com/)):
 ```
-rexray:
-  storageDrivers:
-  - ec2
-  volume:
-    mount:
-      preempt: true
-    unmount:
-      ignoreUsedCount: true
-aws:
+libstorage:
+  service: ebs
+ebs:
   accessKey: {YOUR AWS ACCESS KEY}
   secretKey: {YOUR AWS SECRET KEY}
 ```
@@ -101,7 +96,7 @@ Check that docker and rexray are installed and working correctly
 
 List available storage volumes with 
 
-`rexray volume list`
+```sudo rexray volume list```
 
 Make sure the rexray daemon is running so we can link a persistent storage volume
 
@@ -109,7 +104,7 @@ Make sure the rexray daemon is running so we can link a persistent storage volum
 
 Let's create a storage volume for our Minecraft server
 
-``` rexray volume create --size=16 --volumename=mc-server-volume ```
+``` sudo rexray volume create --size=16 --volumename=mc-server-volume ```
 
 Now if you look under Volumes in your AWS webpage "mc-server-volume" should show up
 
