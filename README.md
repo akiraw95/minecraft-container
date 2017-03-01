@@ -73,7 +73,7 @@ ebs:
 
 Save and exit the config.yml file.
 
-Continue in the SSH terminal, next we'll install Docker using curl and Docker's install script
+Continue in the SSH terminal, next we'll install Docker using curl and [Docker's install script](https://get.docker.com/)
 
 ``` curl -sSL https://get.docker.com/ | sh ```
 
@@ -100,11 +100,13 @@ List available storage volumes with
 
 Make sure the rexray daemon is running so we can link a persistent storage volume
 
-``` sudo service rexray start ```
+``` sudo rexray service start ```
 
-Let's create a storage volume for our Minecraft server
+Let's create a storage volume for our Minecraft server:
 
-``` sudo rexray volume create --size=16 --volumename=mc-server-volume ```
+``` sudo rexray volume create --size=16 mc-server-volume ```
+
+This creates an EBS volume called "mc-server-volume" that has 16 GB of storage.
 
 Now if you look under Volumes in your AWS webpage "mc-server-volume" should show up
 
@@ -120,4 +122,6 @@ To terminate the server enter:
 
 `docker kill {CONTAINER ID}`
 
-**Bring up the server with the same command above, and world data will be persistent**
+**Bring up the server with the same command above, and world data will be persistent.** The world data is stored in "mc-server-volume", so it is retained between container instances. 
+
+This volume can also be attached to other EC2 instances *within the same subnet* (i.e. to upgrade your Minecraft server, launch a new EC2 instance with a different instance type, and perform the same setup steps and mount the same "mc-server-volume" to your Docker container).
